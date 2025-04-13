@@ -1,0 +1,30 @@
+.display-data__header {
+  font-weight: 400;
+  color: #e6f1ff;
+}
+
+.display-data__line {
+  padding: 16px 24px;
+  background-color: transparent;
+}
+
+.display-data__line-title {
+  color: #8892b0;
+}
+
+.display-data__line-value {
+  word-break: break-word;
+  color: #e6f1ff;
+}
+
+/* Style for empty values */
+.display-data__line-value i {
+  color: #8892b0;
+  font-style: italic;
+}
+
+/* Dark theme for checkboxes inside DisplayData */
+.display-data__line .tg-checkbox {
+  --tg-checkbox-checked-background-color: #3a8dff;
+  --tg-checkbox-checked-border-color: #3a8dff;
+}

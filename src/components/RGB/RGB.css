@@ -1,0 +1,13 @@
+.rgb {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #e6f1ff;
+}
+
+.rgb__icon {
+  width: 18px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}

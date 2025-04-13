@@ -1,0 +1,27 @@
+.theme-toggle {
+  margin-bottom: 20px;
+}
+
+.theme-toggle__title {
+  font-weight: 500;
+  color: #e6f1ff;
+  margin-bottom: 8px;
+  padding: 0 16px;
+}
+
+.theme-toggle__radio-group {
+  background-color: #1e40af !important;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid #60a5fa;
+}
+
+.theme-toggle__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #e6f1ff;
+} 

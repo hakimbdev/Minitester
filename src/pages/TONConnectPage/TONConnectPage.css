@@ -1,0 +1,46 @@
+.ton-connect-page {
+  background: #0a192f;
+  min-height: calc(100vh - 60px);
+}
+
+.ton-connect-page__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: #0a192f;
+  color: #e6f1ff;
+}
+
+.ton-connect-page__placeholder .tg-placeholder-description {
+  color: #8892b0 !important;
+}
+
+.ton-connect-page__placeholder .tg-placeholder-header {
+  color: #e6f1ff !important;
+}
+
+.ton-connect-page__button {
+  margin: 16px auto 0;
+  background-color: #041c3a !important;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.ton-connect-page__button-connected {
+  margin: 16px 24px 16px auto;
+  background-color: #60a5fa !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+}
+
+/* Override the TonConnect button styles for dark theme */
+:root {
+  --toncontent-button-background: #60a5fa !important;
+  --toncontent-button-color: #ffffff !important;
+  --toncontent-address-button-background: #1e40af !important;
+  --toncontent-address-button-color: #e6f1ff !important;
+  --toncontent-address-button-border: 1px solid #60a5fa !important;
+}

@@ -1,0 +1,86 @@
+body {
+  background: #0a192f;
+  padding: 0;
+  margin: 0;
+  color: #e6f1ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Global styles to ensure consistent theming */
+:root {
+  --tg-theme-bg-color: #0a192f !important;
+  --tg-theme-secondary-bg-color: #1e40af !important;
+  --tg-theme-text-color: #e6f1ff !important;
+  --tg-theme-hint-color: #8892b0 !important;
+  --tg-theme-link-color: #60a5fa !important;
+  --tg-theme-button-color: #60a5fa !important;
+  --tg-theme-button-text-color: #ffffff !important;
+}
+
+/* Override Telegram UI components */
+.tg-section, 
+.tg-header-section {
+  background-color: #1e40af !important;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(10, 25, 47, 0.5);
+  border: 1px solid #60a5fa;
+}
+
+.tg-cell {
+  background-color: transparent !important;
+}
+
+.tg-title {
+  color: #e6f1ff !important;
+}
+
+.tg-text,
+.tg-subhead {
+  color: #8892b0 !important;
+}
+
+.tg-placeholder-text,
+.tg-placeholder-description {
+  color: #8892b0 !important;
+}
+
+.tg-placeholder-header {
+  color: #e6f1ff !important;
+}
+
+button {
+  outline: none !important;
+}
+
+.tg-app-page {
+  margin-bottom: var(--safe-area-inset-bottom, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  background-color: #0a192f;
+  color: #e6f1ff;
+}
+
+/* Global styles for Telegram UI components */
+.tg-title, h1, h2, h3, h4, h5, h6 {
+  color: #e6f1ff !important;
+}
+
+.tg-text, p {
+  color: #8892b0 !important;
+}
+
+.tg-button {
+  background-color: #60a5fa !important;
+}
+
+/* Progress bar */
+.tg-progress-track {
+  background-color: rgba(96, 165, 250, 0.2) !important;
+}
+
+.tg-progress-fill {
+  background-color: #60a5fa !important;
+}

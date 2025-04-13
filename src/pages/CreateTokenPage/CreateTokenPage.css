@@ -1,0 +1,186 @@
+.create-token-page {
+  padding: 16px;
+  background: #161f2c;
+  min-height: calc(100vh - 60px);
+}
+
+.create-token-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.create-token-page__section-description {
+  color: #8892b0;
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+.create-token-page__form-group {
+  margin-bottom: 20px;
+}
+
+.create-token-page__input-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+  color: #e6f1ff;
+}
+
+.create-token-page__input, 
+.create-token-page__textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: rgba(96, 165, 250, 0.1);
+  color: #e6f1ff;
+}
+
+.create-token-page__textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.create-token-page__slider {
+  width: 100%;
+  margin: 10px 0;
+  background-color: #60a5fa;
+}
+
+.create-token-page__help-text {
+  font-size: 12px;
+  color: #8892b0;
+  margin-top: 4px;
+}
+
+.create-token-page__slider-label {
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: #e6f1ff;
+}
+
+.create-token-page__action-button {
+  width: 100%;
+  margin-top: 16px;
+  background-color: #60a5fa;
+  color: #ffffff;
+}
+
+.create-token-page__button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 0 16px 16px;
+}
+
+.create-token-page__secondary-button,
+.create-token-page__action-button {
+  flex: 1;
+}
+
+.create-token-page__secondary-button {
+  background-color: rgba(96, 165, 250, 0.3);
+  color: #e6f1ff;
+}
+
+.create-token-page__fee-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create-token-page__fee-label {
+  font-weight: 500;
+  color: #8892b0;
+}
+
+.create-token-page__fee-value {
+  font-weight: 600;
+  color: #e6f1ff;
+}
+
+.create-token-page__summary-item {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.create-token-page__summary-label {
+  min-width: 120px;
+  font-weight: 500;
+  color: #8892b0;
+}
+
+/* Logo uploader styles */
+.create-token-page__logo-uploader {
+  margin-bottom: 10px;
+}
+
+.create-token-page__logo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  border: 2px dashed rgba(96, 165, 250, 0.5);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #8892b0;
+  margin-bottom: 10px;
+}
+
+.create-token-page__logo-placeholder span {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.create-token-page__logo-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.create-token-page__change-logo-button {
+  width: auto !important;
+  margin-top: 0 !important;
+  background-color: #60a5fa;
+  color: #ffffff;
+}
+
+.create-token-page__token-preview {
+  padding: 16px;
+  background-color: #1e40af;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #60a5fa;
+}
+
+.create-token-page__token-preview-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.create-token-page__token-preview-info {
+  margin-left: 16px;
+}
+
+.create-token-page__token-preview-details {
+  background-color: rgba(96, 165, 250, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.create-token-page__token-description {
+  font-size: 14px;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #8892b0;
+} 
