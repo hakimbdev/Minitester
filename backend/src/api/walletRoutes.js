@@ -2,13 +2,29 @@ const express = require('express');
 const router = express.Router();
 const blockchainService = require('../services/blockchainService');
 const Token = require('../models/Token');
+const authMiddleware = require('../middleware/auth');
+const rateLimit = require('express-rate-limit');
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 20, // 20 requests per minute
+  message: { message: 'Too many requests from this IP' }
+});
+
+// Apply middleware
+router.use(limiter);
 
 /**
  * @route GET /api/wallet/:address/info
- * @desc Get wallet information
+ * @desc Get wallet information (public route)
  */
 router.get('/:address/info', async (req, res) => {
   try {
+    if (!blockchainService.validateAddress(req.params.address)) {
+      return res.status(400).json({ message: 'Invalid wallet address' });
+    }
+
     const accountInfo = await blockchainService.getAccountInfo(req.params.address);
     res.json(accountInfo);
   } catch (error) {
@@ -21,24 +37,28 @@ router.get('/:address/info', async (req, res) => {
  * @route GET /api/wallet/:address/tokens
  * @desc Get tokens owned by an address
  */
-router.get('/:address/tokens', async (req, res) => {
+router.get('/:address/tokens', authMiddleware, async (req, res) => {
   try {
     const address = req.params.address;
+    
+    // Verify that the requested address matches the authenticated user
+    if (address.toLowerCase() !== req.user.walletAddress.toLowerCase()) {
+      return res.status(403).json({ message: 'Unauthorized access to wallet data' });
+    }
     
     // Get tokens created by this address
     const createdTokens = await Token.findByOwner(address);
     
-    // In a real implementation, you would also check token balances
-    // for other tokens the user might own but didn't create
+    // Get token balances from blockchain
+    const tokenBalances = await blockchainService.getWalletTokenBalances(address);
     
-    // Mock response with some sample data
-    const tokenBalances = createdTokens.map(token => ({
-      token: token,
-      balance: token.ownerAddress === address ? token.totalSupply : 0,
-      value: token.price * (token.ownerAddress === address ? token.totalSupply : 0)
-    }));
+    const response = {
+      createdTokens,
+      tokenBalances,
+      tonBalance: await blockchainService.getTONBalance(address)
+    };
     
-    res.json(tokenBalances);
+    res.json(response);
   } catch (error) {
     console.error('Error fetching wallet tokens:', error);
     res.status(500).json({ message: 'Failed to fetch wallet tokens' });
@@ -46,31 +66,33 @@ router.get('/:address/tokens', async (req, res) => {
 });
 
 /**
- * @route GET /api/wallet/:address/token/:tokenAddress/balance
- * @desc Get token balance for a specific token
+ * @route POST /api/wallet/validate-signature
+ * @desc Validate a wallet signature for authentication
  */
-router.get('/:address/token/:tokenAddress/balance', async (req, res) => {
+router.post('/validate-signature', async (req, res) => {
   try {
-    const { address, tokenAddress } = req.params;
-    
-    // Get token information
-    const token = await Token.findByContractAddress(tokenAddress);
-    if (!token) {
-      return res.status(404).json({ message: 'Token not found' });
+    const { signature, message, walletAddress } = req.body;
+
+    if (!signature || !message || !walletAddress) {
+      return res.status(400).json({ message: 'Missing required fields' });
     }
-    
-    // Get token balance from blockchain
-    const balance = await blockchainService.getTokenBalance(address, tokenAddress);
-    
-    res.json({
-      token,
-      balance,
-      value: token.price * balance
-    });
+
+    const isValid = await blockchainService.verifyTransactionSignature(
+      signature,
+      { message },
+      walletAddress
+    );
+
+    if (isValid) {
+      const token = jwt.sign({ walletAddress }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.json({ valid: true, token });
+    } else {
+      res.json({ valid: false });
+    }
   } catch (error) {
-    console.error('Error fetching token balance:', error);
-    res.status(500).json({ message: 'Failed to fetch token balance' });
+    console.error('Error validating signature:', error);
+    res.status(500).json({ message: 'Failed to validate signature' });
   }
 });
 
-module.exports = router; 
+module.exports = router;

@@ -66,62 +66,33 @@ export const MemePadPage: FC = () => {
   const [sellAll, setSellAll] = useState<boolean>(false);
 
   useEffect(() => {
-    // Mock data - in a real app, this would be fetched from an API
-    const mockTokens: Token[] = [
-      {
-        id: '1',
-        name: 'TonDoge',
-        symbol: 'TDOGE',
-        iconUrl: 'https://placehold.co/100x100',
-        price: 0.00032,
-        marketCap: '$1.2M',
-        change24h: 12.5,
-        launchStatus: 'live',
-        progress: 75,
-        owned: 5000000,
-        tokenAddress: 'EQCBszTNaBYaXRtWY_MjqR6Wn-_qvcvRZWYLdZ-6upPP-z3u',
-      },
-      {
-        id: '2',
-        name: 'TONPepe',
-        symbol: 'PEPE',
-        iconUrl: 'https://placehold.co/100x100',
-        price: 0.00059,
-        marketCap: '$3.5M',
-        change24h: -2.3,
-        launchStatus: 'live',
-        owned: 2500000,
-        tokenAddress: 'EQBeIDoqSVSXqzE15UYQmikKRJ-h8iQBoaD1RbI5JJ6VDqGJ',
-      },
-      {
-        id: '3',
-        name: 'TONMoon',
-        symbol: 'MOON',
-        iconUrl: 'https://placehold.co/100x100',
-        price: 0.00021,
-        marketCap: '$800K',
-        change24h: 5.7,
-        launchStatus: 'upcoming',
-        progress: 45,
-        tokenAddress: 'EQDVUOAvkCugHm6CQoJ7Bp9r9J5YjkFgBx_UNBdj69nVQZFI',
-      },
-      {
-        id: '4',
-        name: 'TONShibu',
-        symbol: 'TSHIBU',
-        iconUrl: 'https://placehold.co/100x100',
-        price: 0.00043,
-        marketCap: '$950K',
-        change24h: 8.2,
-        launchStatus: 'recentlyAdded',
-        progress: 100,
-        owned: 1200000,
-        tokenAddress: 'EQABCDEFGHIJklmnopqrstuvwxyz123456789ABCDEFGHIJKLMN',
-      },
-    ];
+    // Mock data - replace with API call to blockchainService
+    const loadTokens = async () => {
+      try {
+        const fetchedTokens = await blockchainService.getAllTokens();
+        
+        // If user has a wallet connected, fetch their token balances
+        if (wallet) {
+          const ownedTokens = await blockchainService.getTokensByOwner(wallet.account.address);
+          // Merge owned token balances with fetched tokens
+          const mergedTokens = fetchedTokens.map(token => {
+            const ownedToken = ownedTokens.find(t => t.id === token.id);
+            return {
+              ...token,
+              owned: ownedToken?.balance || 0
+            };
+          });
+          setTokens(mergedTokens);
+        } else {
+          setTokens(fetchedTokens);
+        }
+      } catch (error) {
+        console.error('Error loading tokens:', error);
+      }
+    };
 
-    setTokens(mockTokens);
-  }, []);
+    loadTokens();
+  }, [wallet]); // Re-run when wallet changes
 
   const filteredTokens = tokens.filter(token => 
     (token.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -606,4 +577,4 @@ export const MemePadPage: FC = () => {
       </div>
     </Page>
   );
-}; 
+};

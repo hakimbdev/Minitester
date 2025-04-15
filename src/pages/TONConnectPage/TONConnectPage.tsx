@@ -9,6 +9,9 @@ import {
   Section,
   Text,
   Title,
+  Spinner,
+  Button,
+  Divider
 } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 
@@ -23,17 +26,28 @@ const [, e] = bem('ton-connect-page');
 export const TONConnectPage: FC = () => {
   const wallet = useTonWallet();
 
+  if (wallet === undefined) {
+    return (
+      <Page>
+        <div className={e('loading')}>
+          <Spinner size="large" />
+          <Text className={e('loading-text')}>Initializing wallet connection...</Text>
+        </div>
+      </Page>
+    );
+  }
+
   if (!wallet) {
     return (
       <Page>
         <Placeholder
           className={e('placeholder')}
-          header="TON Connect"
+          header="Connect Your TON Wallet"
+          icon="💎"
           description={
             <>
-              <Text>
-                To display the data related to the TON Connect, it is required to connect your
-                wallet
+              <Text className={e('description')}>
+                Connect your wallet to access advanced features and manage your TON assets
               </Text>
               <TonConnectButton className={e('button')}/>
             </>
@@ -43,64 +57,67 @@ export const TONConnectPage: FC = () => {
     );
   }
 
-  const {
-    account: { chain, publicKey, address },
-    device: {
-      appName,
-      appVersion,
-      maxProtocolVersion,
-      platform,
-      features,
-    },
-  } = wallet;
+  const { account: { address } } = wallet;
+  const shortenedAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
 
   return (
     <Page>
       <List>
         {'imageUrl' in wallet && (
           <>
-            <Section>
+            <Section header="Wallet Information">
               <Cell
+                className={e('wallet-cell')}
                 before={
-                  <Avatar src={wallet.imageUrl} alt="Provider logo" width={60} height={60}/>
+                  <Avatar src={wallet.imageUrl} alt={`${wallet.name} logo`} width={60} height={60}/>
                 }
-                after={<Navigation>About wallet</Navigation>}
+                after={
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openLink(wallet.aboutUrl);
+                    }}
+                  >
+                    About
+                  </Button>
+                }
                 subtitle={wallet.appName}
-                onClick={(e) => {
-                  e.preventDefault();
-                  openLink(wallet.aboutUrl);
-                }}
               >
                 <Title level="3">{wallet.name}</Title>
               </Cell>
             </Section>
-            <TonConnectButton className={e('button-connected')}/>
+
+            <Divider />
+
+            <Section header="Connection Status">
+              <TonConnectButton className={e('button-connected')}/>
+            </Section>
           </>
         )}
-        <DisplayData
-          header="Account"
-          rows={[
-            { title: 'Address', value: address },
-            { title: 'Chain', value: chain },
-            { title: 'Public Key', value: publicKey },
-          ]}
-        />
-        <DisplayData
-          header="Device"
-          rows={[
-            { title: 'App Name', value: appName },
-            { title: 'App Version', value: appVersion },
-            { title: 'Max Protocol Version', value: maxProtocolVersion },
-            { title: 'Platform', value: platform },
-            {
-              title: 'Features',
-              value: features
-                .map(f => typeof f === 'object' ? f.name : undefined)
-                .filter(v => v)
-                .join(', '),
-            },
-          ]}
-        />
+        
+        <Section header="Account Details">
+          <DisplayData
+            rows={[
+              { 
+                title: 'Address',
+                value: (
+                  <div className={e('address-container')}>
+                    <Text className={e('address')}>{shortenedAddress}</Text>
+                    <Button
+                      variant="text"
+                      size="small"
+                      onClick={() => navigator.clipboard.writeText(address)}
+                    >
+                      Copy
+                    </Button>
+                  </div>
+                )
+              },
+            ]}
+          />
+        </Section>
       </List>
     </Page>
   );

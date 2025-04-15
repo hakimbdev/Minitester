@@ -5,7 +5,9 @@
 
 .display-data__line {
   padding: 16px 24px;
-  background-color: transparent;
+  background-color: rgba(30, 64, 175, 0.05);
+  border-radius: 8px;
+  margin-bottom: 8px;
 }
 
 .display-data__line-title {
@@ -25,6 +27,6 @@
 
 /* Dark theme for checkboxes inside DisplayData */
 .display-data__line .tg-checkbox {
-  --tg-checkbox-checked-background-color: #3a8dff;
-  --tg-checkbox-checked-border-color: #3a8dff;
+  --tg-checkbox-checked-background-color: #1e40af;
+  --tg-checkbox-checked-border-color: #1e40af;
 }

@@ -2,12 +2,13 @@ import { FC, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
-  Cell,
   List,
   Section,
   Text,
   Title,
   Avatar,
+  Progress,
+  Divider,
 } from '@telegram-apps/telegram-ui';
 import { useTonWallet } from '@tonconnect/ui-react';
 import { Page } from '@/components/Page.tsx';
@@ -95,12 +96,6 @@ export const CreateTokenPage: FC = () => {
     setIsLoading(true);
     
     try {
-      // This is a placeholder for actual token creation logic
-      // In a real implementation, you would:
-      // 1. Create a smart contract for the token
-      // 2. Deploy it to the TON blockchain
-      // 3. Set up liquidity pool
-      
       console.log('Creating token with the following details:', {
         name: tokenName,
         symbol: tokenSymbol,
@@ -116,10 +111,8 @@ export const CreateTokenPage: FC = () => {
         },
       });
       
-      // Simulate contract deployment delay
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      // Success
       alert(`Congratulations! ${tokenName} (${tokenSymbol}) has been created successfully!`);
       navigate('/');
     } catch (error) {
@@ -129,6 +122,38 @@ export const CreateTokenPage: FC = () => {
       setIsLoading(false);
     }
   };
+
+  const getProgressValue = () => {
+    switch (formStep) {
+      case 1:
+        return validateStep1() ? 33 : 0;
+      case 2:
+        return validateStep2() ? 66 : 33;
+      case 3:
+        return 100;
+      default:
+        return 0;
+    }
+  };
+
+  const renderHeader = () => (
+    <div className={element('header')}>
+      <Button onClick={handleBack} size="m">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </Button>
+      <div>
+        <Title level="2">Create Token</Title>
+        {formStep > 1 && (
+          <Text className={element('section-description')} style={{ margin: 0 }}>
+            Step {formStep} of 3
+          </Text>
+        )}
+      </div>
+      <Progress value={getProgressValue()} />
+    </div>
+  );
 
   const renderCustomInput = (
     label: string, 
@@ -188,7 +213,10 @@ export const CreateTokenPage: FC = () => {
     helpText?: string
   ) => (
     <div className={element('form-group')}>
-      <div className={element('slider-label')}>{label}: {value}%</div>
+      <div className={element('slider-label')}>
+        {label}
+        <span style={{ color: '#60a5fa', marginLeft: '8px' }}>{value}%</span>
+      </div>
       <input
         type="range"
         className={element('slider')}
@@ -198,7 +226,11 @@ export const CreateTokenPage: FC = () => {
         max={max}
         step={step}
       />
-      {helpText && <Text className={element('help-text')}>{helpText}</Text>}
+      {helpText && (
+        <Text className={element('help-text')}>
+          {helpText}
+        </Text>
+      )}
     </div>
   );
 
@@ -208,11 +240,32 @@ export const CreateTokenPage: FC = () => {
       <div className={element('logo-uploader')}>
         {tokenLogo ? (
           <div className={element('logo-preview-container')}>
-            <Avatar src={tokenLogo} alt="Token Logo" width={100} height={100} />
-            <Button 
+            <Avatar 
+              src={tokenLogo} 
+              alt="Token Logo" 
+              width={140} 
+              height={140} 
+              style={{ borderRadius: '16px' }}
+            />
+            <Button
               onClick={handleSelectLogo}
               className={element('change-logo-button')}
             >
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ marginRight: '8px' }}
+              >
+                <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+              </svg>
               Change Logo
             </Button>
           </div>
@@ -225,9 +278,12 @@ export const CreateTokenPage: FC = () => {
               fill="none" 
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17 8L12 3L7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-3-4h.01M8 21h8a4 4 0 004-4v-8a4 4 0 00-4-4H8a4 4 0 00-4 4v8a4 4 0 004 4z" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
             </svg>
             <span>Upload Logo</span>
           </div>
@@ -376,34 +432,37 @@ export const CreateTokenPage: FC = () => {
       
       <Section>
         {renderCustomSlider(
-          "Liquidity Percentage",
+          "Initial Liquidity Pool",
           liquidityPercentage,
           setLiquidityPercentage,
           30,
           100,
           1,
-          "Percentage of tokens allocated for liquidity pool"
+          "Higher initial liquidity provides better price stability and trading experience"
         )}
+
+        <div className={element('fee-info')}>
+          <Text className={element('fee-label')}>Token Creation Fee:</Text>
+          <Text className={element('fee-value')}>{launchFee} TON</Text>
+        </div>
       </Section>
       
-      <Section header="Launch Fee">
-        <Cell>
-          <div className={element('fee-info')}>
-            <Text className={element('fee-label')}>Token Creation Fee:</Text>
-            <Text className={element('fee-value')}>{launchFee} TON</Text>
-          </div>
-        </Cell>
-      </Section>
-      
-      <Section header="Token Information">
+      <Section header="Token Preview">
         <div className={element('token-preview')}>
           <div className={element('token-preview-header')}>
-            <Avatar src={tokenLogo || ''} alt={tokenName} width={64} height={64} />
+            <Avatar 
+              src={tokenLogo || ''} 
+              alt={tokenName} 
+              width={64} 
+              height={64}
+              style={{ borderRadius: '12px' }}
+            />
             <div className={element('token-preview-info')}>
               <Title level="3">{tokenName || 'Token Name'}</Title>
-              <Text>{tokenSymbol || 'SYM'}</Text>
+              <Text style={{ color: '#8892b0' }}>{tokenSymbol || 'SYM'}</Text>
             </div>
           </div>
+          <Divider />
           <div className={element('token-preview-details')}>
             <div className={element('summary-item')}>
               <Text className={element('summary-label')}>Total Supply:</Text>
@@ -433,6 +492,7 @@ export const CreateTokenPage: FC = () => {
         <Button
           className={element('secondary-button')}
           onClick={handleBack}
+          size="l"
         >
           Back
         </Button>
@@ -441,6 +501,7 @@ export const CreateTokenPage: FC = () => {
           onClick={handleCreateToken}
           loading={isLoading}
           disabled={!wallet}
+          size="l"
         >
           {wallet ? 'Create Token' : 'Connect Wallet to Create'}
         </Button>
@@ -451,19 +512,9 @@ export const CreateTokenPage: FC = () => {
   return (
     <Page>
       <div className={block()}>
-        <div className={element('header')}>
-          <Button onClick={handleBack}>Back</Button>
-          <Title level="2">
-            Create Token {formStep > 1 ? `(${formStep}/3)` : ''}
-          </Title>
-        </div>
-        
-        <List>
-          {formStep === 1 && renderStep1()}
-          {formStep === 2 && renderStep2()}
-          {formStep === 3 && renderStep3()}
-        </List>
+        {renderHeader()}
+        <List>{formStep === 1 ? renderStep1() : formStep === 2 ? renderStep2() : renderStep3()}</List>
       </div>
     </Page>
   );
-}; 
+};

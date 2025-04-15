@@ -1,0 +1,206 @@
+.token-card {
+  background: rgba(30, 64, 175, 0.15);
+  backdrop-filter: var(--blur-md);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  outline: none;
+}
+
+.token-card:focus-visible {
+  box-shadow: var(--shadow-lg), 0 0 0 3px rgba(96, 165, 250, 0.3);
+  border-color: var(--color-primary-light);
+}
+
+.token-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(96, 165, 250, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.token-card--hovered {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.token-card--hovered::before {
+  opacity: 1;
+}
+
+.token-card__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.token-card__main-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.token-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(30, 64, 175, 0.2);
+}
+
+.token-card__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.token-card__name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.token-card__symbol {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.token-card__price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.token-card__price-value {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.token-card__change {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.token-card__change.positive {
+  background: rgba(52, 199, 89, 0.1);
+  color: var(--color-success);
+}
+
+.token-card__change.negative {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--color-error);
+}
+
+.token-card__details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 12px;
+  background: rgba(30, 64, 175, 0.1);
+  border-radius: var(--radius-md);
+}
+
+.token-card__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.token-card__label {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.token-card__value {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.token-card__address {
+  font-family: 'SF Mono', 'Courier New', Courier, monospace;
+  font-size: 13px;
+  background: rgba(96, 165, 250, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: var(--color-primary-light);
+}
+
+/* Loading state animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.token-card--loading {
+  cursor: default;
+  pointer-events: none;
+}
+
+.token-card__icon--skeleton,
+.token-card__name--skeleton,
+.token-card__symbol--skeleton,
+.token-card__label--skeleton,
+.token-card__value--skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(96, 165, 250, 0.1) 25%,
+    rgba(96, 165, 250, 0.2) 37%,
+    rgba(96, 165, 250, 0.1) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.token-card__name--skeleton {
+  height: 24px;
+  width: 160px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.token-card__symbol--skeleton {
+  height: 18px;
+  width: 80px;
+  border-radius: 4px;
+}
+
+.token-card__label--skeleton {
+  height: 16px;
+  width: 60px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.token-card__value--skeleton {
+  height: 20px;
+  width: 100px;
+  border-radius: 4px;
+}

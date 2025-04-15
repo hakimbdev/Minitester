@@ -194,10 +194,10 @@ export const TokenDetailPage: FC = () => {
         if (result.success) {
           // Update balances after successful purchase
           setOwnedTokens(prev => prev + parseInt(calculateTokenAmount().replace(/,/g, '')));
-          
-          // Success
-          alert(`Successfully purchased ${calculateTokenAmount()} ${token.symbol}!`);
-          setAmount('');
+      
+      // Success
+      alert(`Successfully purchased ${calculateTokenAmount()} ${token.symbol}!`);
+      setAmount('');
           
           // Refresh wallet data
           loadWalletData();
@@ -386,27 +386,27 @@ export const TokenDetailPage: FC = () => {
                 
                 {activeTab === 'buy' ? (
                   <>
-                    <div className={element('input-group')}>
-                      <label className={element('input-label')}>Amount (TON)</label>
-                      <input
-                        type="text"
-                        className={element('input')}
-                        value={amount}
-                        onChange={handleAmountChange}
-                        placeholder="0.0"
-                      />
-                    </div>
-                    
-                    <div className={element('token-amount')}>
-                      <Text>You will receive: {calculateTokenAmount()} {token.symbol}</Text>
-                    </div>
-                    
-                    <Button
-                      className={element('buy-button')}
-                      onClick={handleBuy}
-                      loading={isLoading}
-                      disabled={!amount || parseFloat(amount) <= 0 || !wallet}
-                    >
+                <div className={element('input-group')}>
+                  <label className={element('input-label')}>Amount (TON)</label>
+                  <input
+                    type="text"
+                    className={element('input')}
+                    value={amount}
+                    onChange={handleAmountChange}
+                    placeholder="0.0"
+                  />
+                </div>
+                
+                <div className={element('token-amount')}>
+                  <Text>You will receive: {calculateTokenAmount()} {token.symbol}</Text>
+                </div>
+                
+                <Button
+                  className={element('buy-button')}
+                  onClick={handleBuy}
+                  loading={isLoading}
+                  disabled={!amount || parseFloat(amount) <= 0 || !wallet}
+                >
                       Buy Token
                     </Button>
                   </>
@@ -445,7 +445,7 @@ export const TokenDetailPage: FC = () => {
                       disabled={(!amount && !sellAll) || (parseFloat(amount) <= 0 && !sellAll) || !wallet || ownedTokens <= 0 || (parseFloat(amount) > ownedTokens)}
                     >
                       Sell Token
-                    </Button>
+                </Button>
                   </>
                 )}
               </div>
